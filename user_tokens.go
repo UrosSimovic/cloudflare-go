@@ -23,15 +23,14 @@ type UserTokensPermissionGroupsResponse struct {
 
 // UserToken describes an user token token with all the policies with permissions for given resources.
 type UserToken struct {
-	ID           string            `json:"id,omitempty"`
-	Name         string            `json:"name,omitempty"`
-	Value        string            `json:"value,omitempty"`
-	CreationType string            `json:"creation_type,omitempty"`
-	Status       string            `json:"status,omitempty"`
-	IssuedOn     *time.Time        `json:"issued_on,omitempty"`
-	ModifiedOn   *time.Time        `json:"modified_on,omitempty"`
-	LastUsedOn   *time.Time        `json:"last_used_on,omitempty"`
-	Policies     []UserTokenPolicy `json:"policies,omitempty"`
+	ID         string            `json:"id,omitempty"`
+	Name       string            `json:"name,omitempty"`
+	Value      string            `json:"value,omitempty"`
+	Status     string            `json:"status,omitempty"`
+	IssuedOn   *time.Time        `json:"issued_on,omitempty"`
+	ModifiedOn *time.Time        `json:"modified_on,omitempty"`
+	LastUsedOn *time.Time        `json:"last_used_on,omitempty"`
+	Policies   []UserTokenPolicy `json:"policies,omitempty"`
 }
 
 // UserTokenPolicy contains policy with permissions for given resources.
@@ -66,7 +65,7 @@ type UserTokenIDResponse struct {
 }
 
 // UserTokens returns slice of all created UserTokens.
-func (api *API) UserTokens() ([]UserToken, error) {
+func (api *API) ListUserTokens() ([]UserToken, error) {
 	var r UserTokensResponse
 	res, err := api.makeRequest("GET", "/user/tokens", nil)
 	if err != nil {
@@ -100,9 +99,8 @@ func (api *API) UserToken(tokenID string) (UserToken, error) {
 // CreateUserToken creates UserToken with given name and permission groups
 func (api *API) CreateUserToken(name string, policies []UserTokenPolicy) (UserToken, error) {
 	t := UserToken{
-		Name:         name,
-		CreationType: "custom",
-		Policies:     policies,
+		Name:     name,
+		Policies: policies,
 	}
 
 	var r UserTokenResponse
